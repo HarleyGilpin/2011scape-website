@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Members Area</h1>
-    <p>Welcome, <strong>{{ Auth::user()->getAuthIdentifier() }}</strong>.</p>
+    <p>Welcome, <strong>{{ Auth::user()->displayName() }}</strong>.</p>
     <p>All membership benefits on this server are <strong>free</strong>. There is nothing to purchase.</p>
     <ul>
         <li><a href="/secure/m=displaynames/name.html">Change display name</a></li>

@@ -12,15 +12,50 @@ class GameAccount extends Authenticatable
 
     public $timestamps = false;
 
-    protected $hidden = ['password'];
+    protected $primaryKey = 'id';
 
-    public function getAuthIdentifierName(): string
+    public $incrementing = true;
+
+    protected $keyType = 'int';
+
+    protected $hidden = ['password_hash'];
+
+    public function getAuthPasswordName(): string
     {
-        return 'username';
+        return 'password_hash';
     }
 
-    public function username(): string
+    public function getAuthPassword(): string
     {
-        return $this->getAttribute('username');
+        return (string) ($this->getAttribute('password_hash') ?? '');
+    }
+
+    public function name(): string
+    {
+        return (string) ($this->getAttribute('name') ?? '');
+    }
+
+    public function getRememberToken(): ?string
+    {
+        return null;
+    }
+
+    public function setRememberToken($value): void {}
+
+    public function getRememberTokenName(): string
+    {
+        return '';
+    }
+
+    public function displayName(): string
+    {
+        $row = $this->newQuery()
+            ->getConnection()
+            ->table('variables')
+            ->where('player_id', $this->getKey())
+            ->where('name', 'display_name')
+            ->first();
+
+        return (string) ($row->string_value ?? $this->name());
     }
 }

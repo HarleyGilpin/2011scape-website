@@ -3,18 +3,28 @@
 @section('title', 'Hiscores')
 
 @section('content')
-    <h1>Hiscores @if ($skill)&mdash; Skill #{{ $skill }}@else (Overall)@endif</h1>
+    <h1>Hiscores @if ($skill !== '')&mdash; {{ ucfirst($skill) }}@else (Overall)@endif</h1>
+
+    <nav class="skill-tabs">
+        <a href="/services/m=hiscore/ranking.ws"@if ($skill === '') class="active"@endif>Overall</a>
+        @foreach ($skills as $s)
+            <a href="/services/m=hiscore/ranking.ws?skill={{ $s }}"@if ($skill === $s) class="active"@endif>{{ ucfirst($s) }}</a>
+        @endforeach
+    </nav>
+
     <table class="hiscores">
-        <thead><tr><th>Rank</th><th>Username</th><th>Level</th><th>XP</th></tr></thead>
+        <thead><tr><th>Rank</th><th>Name</th><th>Level</th><th>XP</th></tr></thead>
         <tbody>
-        @foreach ($rows as $row)
+        @forelse ($rows as $row)
             <tr>
                 <td>{{ $row->rank ?? '?' }}</td>
-                <td><a href="/services/m=adventurers-log/a={{ urlencode($row->username) }}/main.ws">{{ $row->username }}</a></td>
+                <td><a href="/services/m=adventurers-log/a={{ urlencode($row->name) }}/main.ws">{{ $row->name }}</a></td>
                 <td>{{ $row->level ?? $row->total_level ?? '' }}</td>
                 <td>{{ number_format((int) ($row->xp ?? $row->total_xp ?? 0)) }}</td>
             </tr>
-        @endforeach
+        @empty
+            <tr><td colspan="4">No players yet.</td></tr>
+        @endforelse
         </tbody>
     </table>
 @endsection

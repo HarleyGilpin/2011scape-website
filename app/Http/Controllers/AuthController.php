@@ -20,7 +20,7 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
+        $data = $request->validate([
             'username' => ['required', 'string', 'max:64'],
             'password' => ['required', 'string'],
         ]);
@@ -28,7 +28,9 @@ class AuthController extends Controller
         $remember = $request->boolean('rem');
         $dest = (string) $request->input('dest', '');
 
-        Session::put('_xf_login_password', $credentials['password']);
+        Session::put('_xf_login_password', $data['password']);
+
+        $credentials = ['name' => $data['username'], 'password' => $data['password']];
 
         if (! Auth::attempt($credentials, $remember)) {
             Session::forget('_xf_login_password');

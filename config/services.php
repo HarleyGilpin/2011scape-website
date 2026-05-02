@@ -42,4 +42,9 @@ return [
         'cookie_prefix' => env('XENFORO_COOKIE_PREFIX', 'xf_'),
     ],
 
+    'game' => [
+        'log_dir' => env('GAME_LOG_DIR'),
+        'items_json' => env('GAME_ITEMS_JSON'),
+    ],
+
 ];

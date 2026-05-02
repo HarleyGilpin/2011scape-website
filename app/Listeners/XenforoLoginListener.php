@@ -10,10 +10,12 @@ class XenforoLoginListener
 {
     public function handle(Login $event): void
     {
-        $username = $event->user->getAuthIdentifier();
+        $username = method_exists($event->user, 'name')
+            ? $event->user->name()
+            : (string) ($event->user->getAttribute('name') ?? '');
         $password = Session::pull('_xf_login_password');
 
-        if (! is_string($username) || ! is_string($password) || $password === '') {
+        if ($username === '' || ! is_string($password) || $password === '') {
             return;
         }
 

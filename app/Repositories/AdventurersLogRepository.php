@@ -11,19 +11,65 @@ class AdventurersLogRepository
 
     public function profile(string $username): ?object
     {
-        return DB::connection(self::CONNECTION)
+        $name = mb_strtolower($username);
+        $account = DB::connection(self::CONNECTION)
             ->table('accounts')
-            ->where('username', $username)
+            ->whereRaw('LOWER(name) = ?', [$name])
             ->first();
+
+        if ($account === null) {
+            return null;
+        }
+
+        $variables = DB::connection(self::CONNECTION)
+            ->table('variables')
+            ->where('player_id', $account->id)
+            ->whereIn('name', ['display_name', 'name_history'])
+            ->get()
+            ->keyBy('name');
+
+        $account->display_name = $variables->get('display_name')->string_value ?? $account->name;
+        $account->name_history = $variables->get('name_history')->string_list_value ?? [];
+
+        return $account;
     }
 
     public function recentActivity(string $username, int $n = 10): Collection
     {
-        return DB::connection(self::CONNECTION)
-            ->table('player_activity')
-            ->where('username', $username)
-            ->orderByDesc('created_at')
-            ->limit($n)
-            ->get();
+        $logRoot = (string) (config('services.game.log_dir', env('GAME_LOG_DIR', '')));
+        if ($logRoot === '' || ! is_dir($logRoot)) {
+            return collect();
+        }
+
+        $file = rtrim($logRoot, '/').'/'.str_replace([' ', '/'], '_', mb_strtolower($username)).'.tsv';
+        if (! is_file($file)) {
+            return collect();
+        }
+
+        $rows = collect();
+        $fp = fopen($file, 'rb');
+        if ($fp === false) {
+            return $rows;
+        }
+
+        try {
+            while (($line = fgets($fp)) !== false) {
+                $parts = explode("\t", rtrim($line, "\r\n"));
+                if (count($parts) < 2) {
+                    continue;
+                }
+                $rows->prepend((object) [
+                    'created_at' => $parts[0],
+                    'description' => implode("\t", array_slice($parts, 1)),
+                ]);
+                if ($rows->count() > $n * 10) {
+                    $rows = $rows->slice(0, $n * 10);
+                }
+            }
+        } finally {
+            fclose($fp);
+        }
+
+        return $rows->take($n)->values();
     }
 }

@@ -20,7 +20,7 @@ class DisplaynameController extends Controller
             $user = Auth::user();
             DisplaynameChange::create([
                 'user_account_id' => (int) $user->getAuthIdentifier(),
-                'old_name' => (string) ($user->getAttribute('username') ?? ''),
+                'old_name' => method_exists($user, 'name') ? $user->name() : (string) ($user->getAttribute('name') ?? ''),
                 'new_name' => $data['new_name'],
                 'requested_at' => now(),
                 'status' => 'pending',

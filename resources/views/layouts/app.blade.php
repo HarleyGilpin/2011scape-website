@@ -24,7 +24,7 @@
             <a href="/"><img src="/img/banner-runescape.png" alt="RuneScape"></a>
             @auth
                 <div class="user-bar">
-                    Logged in as <strong>{{ Auth::user()->getAuthIdentifier() }}</strong>
+                    Logged in as <strong>{{ Auth::user()->displayName() }}</strong>
                     &middot; <a href="/secure/m=weblogin/members/members.html">Members</a>
                     &middot; <form method="post" action="/secure/m=weblogin/logout.html" style="display:inline">@csrf<button type="submit" class="link-btn">Logout</button></form>
                 </div>
