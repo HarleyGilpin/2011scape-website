@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -110,6 +110,20 @@ return [
             'prefix_indexes' => true,
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+        ],
+
+        'pgsql_game' => [
+            'driver' => 'pgsql',
+            'host' => env('GAME_DB_HOST', '127.0.0.1'),
+            'port' => env('GAME_DB_PORT', '5432'),
+            'database' => env('GAME_DB_DATABASE', '2011scape'),
+            'username' => env('GAME_DB_USERNAME', ''),
+            'password' => env('GAME_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
         ],
 
     ],
