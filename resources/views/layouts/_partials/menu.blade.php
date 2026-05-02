@@ -43,6 +43,7 @@
             </form>
         </li>
     @else
+        <li class="top"><a href="/register" id="register" class="tl"><span class="ts">Register</span></a></li>
         <li class="top"><a href="/login" id="login" class="tl"><span class="ts">Log In</span></a></li>
     @endauth
 </ul>

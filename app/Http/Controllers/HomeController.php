@@ -8,6 +8,7 @@ use App\Models\KbArticle;
 use App\Models\NewsItem;
 use App\Models\Poll;
 use App\Models\PollVote;
+use App\Services\PlayerCountService;
 use App\Services\XenforoBridge;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -30,8 +31,10 @@ class HomeController extends Controller
         }
 
         $xfThreads = XenforoBridge::fromConfig()->recentThreads(5);
+        $online = app(PlayerCountService::class)->count();
 
         return view('home', [
+            'online' => $online,
             'news' => NewsItem::query()->orderByDesc('published_at')->limit(6)->get(),
             'devblogs' => DevblogPost::query()->orderByDesc('published_at')->limit(6)->get(),
             'articles' => KbArticle::query()->inRandomOrder()->limit(6)->get(),

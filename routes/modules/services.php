@@ -3,7 +3,10 @@
 use App\Http\Controllers\AdventurersLogController;
 use App\Http\Controllers\HiscoresController;
 use App\Http\Controllers\ItemDbController;
+use App\Http\Controllers\WorldlistController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/worldlist', [WorldlistController::class, 'index'])->name('worldlist');
 
 Route::get('/adventurer/{user}', [AdventurersLogController::class, 'show'])
     ->where('user', '[A-Za-z0-9_+\-]+')

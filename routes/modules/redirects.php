@@ -62,6 +62,8 @@ $exact = [
     '/services/m=hiscore/hiscores.html' => '/hiscores',
     '/services/m=itemdb_rs/frontpage.html' => '/items',
     '/services/m=adventurers-log/display_player_profile.html' => '/hiscores',
+    '/secure/m=account-recovery/' => '/recover',
+    '/secure/m=account-recovery' => '/recover',
 
     // Legal landings
     '/terms/terms.html' => '/terms',

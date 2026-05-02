@@ -45,6 +45,7 @@ return [
     'game' => [
         'log_dir' => env('GAME_LOG_DIR'),
         'items_json' => env('GAME_ITEMS_JSON'),
+        'status_url' => env('GAME_STATUS_URL'),
     ],
 
 ];

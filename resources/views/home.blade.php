@@ -27,7 +27,7 @@
                     <div id="header">
                         <h1><span>2011scape - </span>The World's Most Popular Free MMORPG</h1>
                         <a id="playnow" class="HoverImg" href="/play"><img src="/img/main/home2010/play.jpg" alt="Play Now"></a>
-                        <span id="playerCount">2011scape archive — non-commercial server</span>
+                        <span id="playerCount">@if (! empty($online) && $online > 0){{ number_format($online) }} people currently online @else 2011scape archive — non-commercial server @endif</span>
                         <form id="headerSearch" action="/kb" method="get">
                             <input type="text" name="q" placeholder="Search knowledge base...">
                             <div class="HoverImg">
