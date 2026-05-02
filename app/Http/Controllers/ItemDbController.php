@@ -12,8 +12,13 @@ class ItemDbController extends Controller
 
     public function route(Request $request, string $any): View
     {
-        if (preg_match('/viewitem(?:\.ws)?.*?obj=(\d+)/', $any, $m)) {
-            $item = $this->items->find((int) $m[1]);
+        $obj = $request->query('obj');
+        if ($obj === null && preg_match('/viewitem(?:\.ws)?\/?(\d+)?/', $any, $m) && isset($m[1]) && $m[1] !== '') {
+            $obj = $m[1];
+        }
+
+        if ($obj !== null && $obj !== '' && str_starts_with($any, 'viewitem')) {
+            $item = $this->items->find((int) $obj);
             abort_unless($item !== null, 404);
 
             return view('services.itemdb.item', ['item' => $item]);

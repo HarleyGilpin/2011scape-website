@@ -16,9 +16,9 @@ class ItemDbRepository
         $needle = mb_strtolower($q);
 
         return $items
-            ->filter(fn (array $item) => str_contains(mb_strtolower((string) ($item['name'] ?? '')), $needle))
+            ->filter(fn (array $item) => str_contains($this->displayName($item), $needle))
             ->take($limit)
-            ->map(fn (array $item) => (object) $item)
+            ->map(fn (array $item) => $this->shape($item))
             ->values();
     }
 
@@ -27,9 +27,23 @@ class ItemDbRepository
         $items = $this->loadAll();
         $key = (string) $itemId;
 
-        $item = $items->first(fn (array $row) => (string) ($row['id'] ?? $row['name'] ?? '') === $key);
+        $item = $items->first(fn (array $row) => (string) ($row['id'] ?? '') === $key || ($row['slug'] ?? '') === $key);
 
-        return $item === null ? null : (object) $item;
+        return $item === null ? null : $this->shape($item);
+    }
+
+    private function displayName(array $item): string
+    {
+        return mb_strtolower(str_replace('_', ' ', (string) ($item['name'] ?? $item['slug'] ?? '')));
+    }
+
+    private function shape(array $item): object
+    {
+        $item['name'] = $item['name'] ?? ucwords(str_replace('_', ' ', (string) ($item['slug'] ?? '')));
+        $item['description'] = $item['description'] ?? $item['examine'] ?? '';
+        $item['members'] = $item['members'] ?? false;
+        $item['tradeable'] = $item['tradeable'] ?? false;
+        return (object) $item;
     }
 
     public function categories(): Collection
@@ -45,6 +59,9 @@ class ItemDbRepository
     private function loadAll(): Collection
     {
         $path = (string) config('services.game.items_json', env('GAME_ITEMS_JSON', ''));
+        if ($path !== '' && ! str_starts_with($path, '/')) {
+            $path = base_path($path);
+        }
         if ($path === '' || ! is_file($path)) {
             return collect();
         }
