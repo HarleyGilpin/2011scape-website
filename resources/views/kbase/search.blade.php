@@ -15,7 +15,11 @@
             @forelse ($results as $hit)
                 <li>
                     <a href="/kbase/guid/{{ $hit->slug }}.html"><strong>{{ $hit->title }}</strong></a>
-                    @if ($hit->search_text)<p>{{ \Illuminate\Support\Str::limit($hit->search_text, 200) }}</p>@endif
+                    @if (! empty($hit->snippet))
+                        <p class="snippet">{!! preg_replace('#&lt;(/?mark)&gt;#', '<$1>', e($hit->snippet)) !!}</p>
+                    @elseif ($hit->search_text)
+                        <p>{{ \Illuminate\Support\Str::limit($hit->search_text, 200) }}</p>
+                    @endif
                 </li>
             @empty
                 <li>No results.</li>

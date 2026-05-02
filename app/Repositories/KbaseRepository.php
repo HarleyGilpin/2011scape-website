@@ -4,10 +4,11 @@ namespace App\Repositories;
 
 use App\Models\KbArticle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 
 class KbaseRepository
 {
+    private const HEADLINE_OPTS = 'StartSel=<mark>,StopSel=</mark>,MaxFragments=2,FragmentDelimiter= … ,MinWords=8,MaxWords=22';
+
     public function search(string $q, int $perPage = 20): LengthAwarePaginator
     {
         $term = trim($q);
@@ -16,9 +17,14 @@ class KbaseRepository
             return KbArticle::query()->orderBy('title')->paginate($perPage);
         }
 
+        $tsquery = 'plainto_tsquery(?, ?)';
+        $headline = "ts_headline(?, search_text, {$tsquery}, ?) AS snippet";
+
         return KbArticle::query()
-            ->whereRaw('search_tsv @@ plainto_tsquery(?, ?)', ['english', $term])
-            ->orderByRaw('ts_rank(search_tsv, plainto_tsquery(?, ?)) DESC', ['english', $term])
+            ->select('kb_articles.*')
+            ->selectRaw($headline, ['english', 'english', $term, self::HEADLINE_OPTS])
+            ->whereRaw("search_tsv @@ {$tsquery}", ['english', $term])
+            ->orderByRaw("ts_rank(search_tsv, {$tsquery}) DESC", ['english', $term])
             ->paginate($perPage)
             ->appends(['q' => $q]);
     }
