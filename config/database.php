@@ -126,6 +126,20 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_game_writer' => [
+            'driver' => 'pgsql',
+            'host' => env('GAME_DB_WRITE_HOST', env('GAME_DB_HOST', '127.0.0.1')),
+            'port' => env('GAME_DB_WRITE_PORT', env('GAME_DB_PORT', '5432')),
+            'database' => env('GAME_DB_WRITE_DATABASE', env('GAME_DB_DATABASE', '2011scape')),
+            'username' => env('GAME_DB_WRITE_USERNAME', env('GAME_DB_USERNAME', '')),
+            'password' => env('GAME_DB_WRITE_PASSWORD', env('GAME_DB_PASSWORD', '')),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
     ],
 
     /*
