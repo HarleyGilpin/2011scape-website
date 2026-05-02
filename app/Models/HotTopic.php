@@ -8,5 +8,5 @@ class HotTopic extends Model
 {
     protected $table = 'hottopics';
 
-    protected $fillable = ['position', 'label', 'url'];
+    protected $fillable = ['position', 'label', 'image', 'url', 'byline'];
 }
