@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'xenforo' => [
+        'url' => env('XENFORO_URL'),
+        'api_key' => env('XENFORO_API_KEY'),
+        'api_user' => env('XENFORO_API_USER', 1),
+        'cookie_prefix' => env('XENFORO_COOKIE_PREFIX', 'xf_'),
+    ],
+
 ];
