@@ -17,7 +17,7 @@
     <title>2011scape - The No.1 Free Online Multiplayer Game</title>
     <meta name="description" content="Play 2011scape for free, and join a global community of adventurers as you complete quests and win enormous treasures in a 3D world full of magic and monsters.">
 </head>
-<body class="title">
+<body class="BgBody">
 <div class="BgContent">
     <div class="BgHead">
         <div class="BgFoot">
