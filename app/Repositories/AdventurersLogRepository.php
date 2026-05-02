@@ -34,6 +34,37 @@ class AdventurersLogRepository
         return $account;
     }
 
+    public function skills(int $playerId): Collection
+    {
+        $exp = DB::connection(self::CONNECTION)
+            ->table('experience')
+            ->where('player_id', $playerId)
+            ->first();
+
+        $lvl = DB::connection(self::CONNECTION)
+            ->table('levels')
+            ->where('player_id', $playerId)
+            ->first();
+
+        if ($exp === null || $lvl === null) {
+            return collect();
+        }
+
+        return collect(HiscoresRepository::SKILLS)->map(fn (string $skill) => (object) [
+            'skill' => $skill,
+            'level' => (int) ($lvl->{$skill} ?? 1),
+            'xp' => (int) ($exp->{$skill} ?? 0),
+        ]);
+    }
+
+    public function totals(Collection $skills): object
+    {
+        return (object) [
+            'level' => $skills->sum('level'),
+            'xp' => $skills->sum('xp'),
+        ];
+    }
+
     public function recentActivity(string $username, int $n = 10): Collection
     {
         $logRoot = (string) (config('services.game.log_dir', env('GAME_LOG_DIR', '')));

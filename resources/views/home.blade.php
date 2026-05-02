@@ -146,19 +146,35 @@
                             <div class="Shadow"></div>
                             <div class="Caster">
                                 <a href="/services/m=forum/" class="communityTitle"><h2>Hot Forum Topics</h2></a>
-                                @foreach ($hottopics as $topic)
-                                    <a href="{{ $topic->url }}" class="hot">
-                                        <span class="hotImage">
-                                            @if ($topic->image)<img src="{{ $topic->image }}" alt="">@endif
-                                            <span></span>
-                                        </span>
-                                        <h3>{{ $topic->label }}</h3>
-                                        @if ($topic->byline){{ $topic->byline }}@endif
-                                    </a>
-                                @endforeach
+                                @if (! empty($xfThreads))
+                                    @foreach ($xfThreads as $t)
+                                        <a href="{{ $t['view_url'] }}" class="hot">
+                                            <span class="hotImage">
+                                                <img src="/services/m=config-manager/hottopics/img/news_announcements_2.gif" alt="">
+                                                <span></span>
+                                            </span>
+                                            <h3>{{ $t['title'] }}</h3>
+                                            @if ($t['username']) Posted by {{ $t['username'] }} @endif
+                                            @if ($t['last_post_date']) on {{ \Illuminate\Support\Carbon::createFromTimestamp($t['last_post_date'])->format('d-M-Y') }} @endif
+                                        </a>
+                                    @endforeach
+                                @else
+                                    @foreach ($hottopics as $topic)
+                                        <a href="{{ $topic->url }}" class="hot">
+                                            <span class="hotImage">
+                                                @if ($topic->image)<img src="{{ $topic->image }}" alt="">@endif
+                                                <span></span>
+                                            </span>
+                                            <h3>{{ $topic->label }}</h3>
+                                            @if ($topic->byline){{ $topic->byline }}@endif
+                                        </a>
+                                    @endforeach
+                                @endif
                                 <a href="/services/m=forum/" class="communityMore">Visit Forums &gt;</a>
                             </div>
                         </div>
+
+                        @include('_partials.poll', ['poll' => $poll, 'voted' => $voted])
                     </div>{{-- /#left --}}
 
                     {{-- Featured tiles right column --}}

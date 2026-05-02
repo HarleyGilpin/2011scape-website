@@ -6,17 +6,39 @@ use App\Models\DevblogPost;
 use App\Models\HotTopic;
 use App\Models\KbArticle;
 use App\Models\NewsItem;
+use App\Models\Poll;
+use App\Models\PollVote;
+use App\Services\XenforoBridge;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $poll = Poll::query()->where('active', true)->latest()->with('options')->first();
+        $voted = false;
+        if ($poll !== null) {
+            $token = (string) $request->cookie('voter_token', '');
+            if ($token === '' && auth()->check()) {
+                $token = 'user:'.auth()->id();
+            }
+            $voted = $token !== '' && PollVote::query()
+                ->where('poll_id', $poll->id)
+                ->where('voter_token', $token)
+                ->exists();
+        }
+
+        $xfThreads = XenforoBridge::fromConfig()->recentThreads(5);
+
         return view('home', [
             'news' => NewsItem::query()->orderByDesc('published_at')->limit(6)->get(),
             'devblogs' => DevblogPost::query()->orderByDesc('published_at')->limit(6)->get(),
             'articles' => KbArticle::query()->inRandomOrder()->limit(6)->get(),
             'hottopics' => HotTopic::query()->orderBy('position')->get(),
+            'xfThreads' => $xfThreads,
+            'poll' => $poll,
+            'voted' => $voted,
             'slides' => [
                 [
                     'image' => '/img/main/home2010/banners/king-of-the-dwarves.jpg',

@@ -15,8 +15,12 @@ class AdventurersLogController extends Controller
         $profile = $this->log->profile($username);
         abort_unless($profile !== null, 404);
 
+        $skills = $this->log->skills((int) $profile->id);
+
         return view('services.adventurers_log.show', [
             'profile' => $profile,
+            'skills' => $skills,
+            'totals' => $this->log->totals($skills),
             'activity' => $this->log->recentActivity($username),
         ]);
     }

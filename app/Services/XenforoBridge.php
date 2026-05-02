@@ -25,6 +25,49 @@ class XenforoBridge
         );
     }
 
+    public function recentThreads(int $limit = 5): array
+    {
+        if ($this->baseUrl === '' || $this->apiKey === '') {
+            return [];
+        }
+
+        return cache()->remember('xf.recent_threads', 300, function () use ($limit) {
+            try {
+                $response = Http::withHeaders([
+                    'XF-Api-Key' => $this->apiKey,
+                    'XF-Api-User' => (string) $this->apiUser,
+                ])->acceptJson()->get($this->baseUrl.'/api/threads/', [
+                    'order' => 'last_post_date',
+                    'direction' => 'desc',
+                    'page' => 1,
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning('Xenforo /api/threads fetch failed', ['exception' => $e->getMessage()]);
+                return [];
+            }
+
+            if (! $response->successful()) {
+                Log::warning('Xenforo /api/threads non-2xx', ['status' => $response->status()]);
+                return [];
+            }
+
+            $threads = $response->json('threads') ?? [];
+
+            return collect($threads)
+                ->take($limit)
+                ->map(fn ($t) => [
+                    'id' => $t['thread_id'] ?? null,
+                    'title' => (string) ($t['title'] ?? ''),
+                    'username' => (string) ($t['username'] ?? ''),
+                    'last_post_date' => (int) ($t['last_post_date'] ?? 0),
+                    'view_url' => rtrim($this->baseUrl, '/').'/threads/'.($t['thread_id'] ?? ''),
+                    'icon_url' => null,
+                ])
+                ->values()
+                ->all();
+        });
+    }
+
     public function login(string $username, string $password): ?array
     {
         if ($this->baseUrl === '' || $this->apiKey === '') {

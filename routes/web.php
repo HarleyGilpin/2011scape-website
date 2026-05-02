@@ -15,5 +15,8 @@ require __DIR__.'/modules/gamelaunch.php';
 require __DIR__.'/modules/pages.php';
 require __DIR__.'/modules/legal.php';
 
+Route::post('/polls/{poll}/vote', [App\Http\Controllers\PollController::class, 'vote'])
+    ->name('polls.vote');
+
 // MUST be loaded last — legacy 301s should never override canonical routes.
 require __DIR__.'/modules/redirects.php';

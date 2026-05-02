@@ -10,7 +10,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             NewsSeeder::class,
+            DevblogSeeder::class,
             HotTopicsSeeder::class,
+            PollsSeeder::class,
         ]);
     }
 }
