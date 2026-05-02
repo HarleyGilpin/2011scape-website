@@ -2,25 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+    <link rel="SHORTCUT ICON" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/img/mobile.png">
     <link href="/css/global-38.css" rel="stylesheet">
     <link href="/css/kbase-32.css" rel="stylesheet">
     <link href="/css/news-3.css" rel="stylesheet">
+    <script type="text/javascript" src="/jagex.com/js/jquery/jquery_1_4_2.js"></script>
     <title>@yield('title', 'RuneScape Knowledge Base')</title>
-    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+    @stack('head')
 </head>
-<body class="kbase-page">
-    <div id="page-wrap">
-        <div id="header"><a href="/"><img src="/img/banner-runescape.png" alt="RuneScape"></a></div>
-        <nav id="kbase-search-bar">
-            <form action="/kbase/search.html" method="get">
-                <input type="search" name="q" placeholder="Search knowledge base" value="{{ request('q') }}">
-                <button type="submit">Search</button>
-            </form>
-        </nav>
-        <main id="content">
-            @yield('content')
-        </main>
-        <footer id="footer"><p><a href="/">Back to home</a></p></footer>
-    </div>
+<body id="navguide" class="bodyBackground">
+    @include('layouts._partials.page_open')
+        @yield('content')
+    @include('layouts._partials.page_close')
+    @stack('scripts')
 </body>
 </html>

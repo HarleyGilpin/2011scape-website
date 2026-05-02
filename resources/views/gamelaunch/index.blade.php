@@ -21,6 +21,6 @@
         <li><a href="/downloads/runescape-261110.msi">Windows installer (MSI)</a></li>
         <li><a href="/downloads/RuneScape-20090424.exe">Legacy Windows installer (EXE)</a></li>
         <li><a href="/downloads/jagexlauncher-src-261110.bz2">Source (.bz2)</a></li>
-        <li><a href="/classicapplet/playclassic.html">Classic applet</a></li>
+        <li><a href="/play/classic">Classic applet</a></li>
     </ul>
 @endsection

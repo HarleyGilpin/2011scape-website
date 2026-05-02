@@ -13,5 +13,5 @@
         </div>
         @if ($item->author)<p><b><i>{{ $item->author }}</i></b></p>@endif
     </article>
-    <p><a href="/services/m=news/index.html">&laquo; Back to news</a></p>
+    <p><a href="/news">&laquo; Back to news</a></p>
 @endsection

@@ -73,6 +73,6 @@ class DisplaynameController extends Controller
             $message = 'Submitted for review (game DB temporarily unavailable).';
         }
 
-        return redirect()->to('/secure/m=displaynames/name.html')->with('status', $message);
+        return redirect()->to('/account/displayname')->with('status', $message);
     }
 }

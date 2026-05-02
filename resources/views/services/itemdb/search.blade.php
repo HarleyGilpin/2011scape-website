@@ -4,7 +4,7 @@
 
 @section('content')
     <h1>Item Database</h1>
-    <form method="get" action="/services/m=itemdb_rs/results">
+    <form method="get" action="/items">
         <input type="search" name="query" value="{{ $q }}" placeholder="Search items">
         <button type="submit">Search</button>
     </form>
@@ -12,7 +12,7 @@
     @if ($q !== '')
         <ul class="item-results">
             @forelse ($results as $item)
-                <li><a href="/services/m=itemdb_rs/viewitem.ws?obj={{ $item->id }}">{{ $item->name }}</a></li>
+                <li><a href="/items/{{ $item->id }}">{{ $item->name }}</a></li>
             @empty
                 <li>No items match.</li>
             @endforelse

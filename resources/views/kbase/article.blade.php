@@ -5,9 +5,9 @@
 @section('content')
     <div class="navigation">
         <div class="location">
-            <a href="/kbase/search.html">Knowledge Base</a>
+            <a href="/kb">Knowledge Base</a>
             @if ($article->category)
-                &raquo; <a href="/kbase/view-guid-{{ $article->category->slug }}.html">{{ $article->category->name }}</a>
+                &raquo; <a href="/kb/category/{{ $article->category->slug }}">{{ $article->category->name }}</a>
             @endif
             &raquo; <span>{{ $article->title }}</span>
         </div>

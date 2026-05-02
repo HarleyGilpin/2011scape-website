@@ -44,13 +44,13 @@ class DisplaynameTest extends TestCase
 
     public function test_form_requires_auth(): void
     {
-        $this->get('/secure/m=displaynames/name.html')->assertRedirect();
+        $this->get('/account/displayname')->assertRedirect();
     }
 
     public function test_authenticated_user_sees_form(): void
     {
         $this->actingAs($this->user)
-            ->get('/secure/m=displaynames/name.html')
+            ->get('/account/displayname')
             ->assertOk()
             ->assertSeeText('Change Display Name')
             ->assertSee('name="new_name"', escape: false);
@@ -61,9 +61,9 @@ class DisplaynameTest extends TestCase
         $newName = 'TestZezima';
 
         $response = $this->actingAs($this->user)
-            ->post('/secure/m=displaynames/name.html', ['new_name' => $newName]);
+            ->post('/account/displayname', ['new_name' => $newName]);
 
-        $response->assertRedirect('/secure/m=displaynames/name.html');
+        $response->assertRedirect('/account/displayname');
         $response->assertSessionHas('status');
 
         $this->assertDatabaseHas('displayname_changes', [
@@ -85,8 +85,8 @@ class DisplaynameTest extends TestCase
     public function test_invalid_format_rejected(): void
     {
         $this->actingAs($this->user)
-            ->from('/secure/m=displaynames/name.html')
-            ->post('/secure/m=displaynames/name.html', ['new_name' => 'has!bang'])
+            ->from('/account/displayname')
+            ->post('/account/displayname', ['new_name' => 'has!bang'])
             ->assertSessionHasErrors('new_name');
     }
 
@@ -102,8 +102,8 @@ class DisplaynameTest extends TestCase
 
         try {
             $this->actingAs($this->user)
-                ->from('/secure/m=displaynames/name.html')
-                ->post('/secure/m=displaynames/name.html', ['new_name' => 'Cabbage'])
+                ->from('/account/displayname')
+                ->post('/account/displayname', ['new_name' => 'Cabbage'])
                 ->assertSessionHasErrors('new_name');
 
             $this->assertDatabaseMissing('displayname_changes', [

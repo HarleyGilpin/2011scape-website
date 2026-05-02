@@ -5,14 +5,15 @@ use App\Http\Controllers\DisplaynameController;
 use App\Http\Controllers\TicketingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('secure/m=weblogin/loginform.html', [AuthController::class, 'form'])->name('login');
-Route::post('secure/m=weblogin/login.html', [AuthController::class, 'login'])->name('login.submit');
-Route::match(['get', 'post'], 'secure/m=weblogin/logout.html', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'form'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
-    Route::get('secure/m=weblogin/members/members.html', [AuthController::class, 'members'])->name('members');
-    Route::match(['get', 'post'], 'secure/m=displaynames/name.html', [DisplaynameController::class, 'form'])->name('displaynames');
-    Route::get('secure/m=ticketing/{page}.html', [TicketingController::class, 'show'])
-        ->where('page', 'billingsupport(-cat-\d+)?')
-        ->name('ticketing');
+    Route::get('/members', [AuthController::class, 'members'])->name('members');
+    Route::match(['get', 'post'], '/account/displayname', [DisplaynameController::class, 'form'])->name('displaynames');
+    Route::get('/support', [TicketingController::class, 'index'])->name('support');
+    Route::get('/support/{cat}', [TicketingController::class, 'show'])
+        ->where('cat', '[0-9]+')
+        ->name('support.cat');
 });

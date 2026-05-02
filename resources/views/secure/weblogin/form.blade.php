@@ -14,7 +14,7 @@
             <div class="brown_background">
                 <div id="login_background" class="inner_brown_background">
                     <div id="login_panel" class="brown_box">
-                        <form id="login_form" action="/secure/m=weblogin/login.html" method="post" autocomplete="off">
+                        <form id="login_form" action="/login" method="post" autocomplete="off">
                             @csrf
                             <div class="bottom"><div class="repeat">
                                 <div class="top_section">

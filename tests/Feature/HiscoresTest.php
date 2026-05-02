@@ -12,7 +12,7 @@ class HiscoresTest extends TestCase
 
     public function test_overall_ranking_renders_zezima(): void
     {
-        $response = $this->get('/services/m=hiscore/ranking.ws');
+        $response = $this->get('/hiscores');
 
         $response->assertOk();
         $response->assertSeeText('Zezima');
@@ -21,7 +21,7 @@ class HiscoresTest extends TestCase
 
     public function test_per_skill_ranking_renders(): void
     {
-        $response = $this->get('/services/m=hiscore/ranking.ws?skill=attack');
+        $response = $this->get('/hiscores?skill=attack');
 
         $response->assertOk();
         $response->assertSeeText('Attack');
@@ -30,7 +30,7 @@ class HiscoresTest extends TestCase
 
     public function test_unknown_skill_falls_back_to_overall(): void
     {
-        $this->get('/services/m=hiscore/ranking.ws?skill=bogus')
+        $this->get('/hiscores?skill=bogus')
             ->assertOk()
             ->assertSeeText('Overall');
     }

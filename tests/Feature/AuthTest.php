@@ -11,7 +11,7 @@ class AuthTest extends TestCase
 
     public function test_login_form_renders_jagex_chrome(): void
     {
-        $response = $this->get('/secure/m=weblogin/loginform.html');
+        $response = $this->get('/login');
 
         $response->assertOk();
         $response->assertSee('id="login_form"', escape: false);
@@ -27,7 +27,7 @@ class AuthTest extends TestCase
 
     public function test_login_with_correct_credentials_redirects_to_members(): void
     {
-        $response = $this->post('/secure/m=weblogin/login.html', [
+        $response = $this->post('/login', [
             'username' => 'Zezima',
             'password' => 'Hunter2!',
             'mod' => 'www',
@@ -35,36 +35,36 @@ class AuthTest extends TestCase
             'dest' => '',
         ]);
 
-        $response->assertRedirect('/secure/m=weblogin/members/members.html');
+        $response->assertRedirect('/members');
         $this->assertAuthenticated();
     }
 
     public function test_login_is_case_insensitive(): void
     {
-        $this->post('/secure/m=weblogin/login.html', [
+        $this->post('/login', [
             'username' => 'ZEZIMA',
             'password' => 'Hunter2!',
-        ])->assertRedirect('/secure/m=weblogin/members/members.html');
+        ])->assertRedirect('/members');
 
         $this->assertAuthenticated();
     }
 
     public function test_login_with_wrong_password_fails(): void
     {
-        $response = $this->from('/secure/m=weblogin/loginform.html')
-            ->post('/secure/m=weblogin/login.html', [
+        $response = $this->from('/login')
+            ->post('/login', [
                 'username' => 'Zezima',
                 'password' => 'wrong',
             ]);
 
-        $response->assertRedirect('/secure/m=weblogin/loginform.html');
+        $response->assertRedirect('/login');
         $response->assertSessionHasErrors('username');
         $this->assertGuest();
     }
 
     public function test_members_page_requires_auth(): void
     {
-        $this->get('/secure/m=weblogin/members/members.html')->assertRedirect();
+        $this->get('/members')->assertRedirect();
     }
 
     public function test_authenticated_user_sees_display_name(): void
@@ -73,7 +73,7 @@ class AuthTest extends TestCase
         $this->assertNotNull($user, 'Zezima fixture missing from game DB');
 
         $this->actingAs($user)
-            ->get('/secure/m=weblogin/members/members.html')
+            ->get('/members')
             ->assertOk()
             ->assertSee('Welcome, <strong>Zezima</strong>', escape: false);
     }

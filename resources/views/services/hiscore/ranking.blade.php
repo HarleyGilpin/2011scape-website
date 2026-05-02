@@ -6,9 +6,9 @@
     <h1>Hiscores @if ($skill !== '')&mdash; {{ ucfirst($skill) }}@else (Overall)@endif</h1>
 
     <nav class="skill-tabs">
-        <a href="/services/m=hiscore/ranking.ws"@if ($skill === '') class="active"@endif>Overall</a>
+        <a href="/hiscores"@if ($skill === '') class="active"@endif>Overall</a>
         @foreach ($skills as $s)
-            <a href="/services/m=hiscore/ranking.ws?skill={{ $s }}"@if ($skill === $s) class="active"@endif>{{ ucfirst($s) }}</a>
+            <a href="/hiscores?skill={{ $s }}"@if ($skill === $s) class="active"@endif>{{ ucfirst($s) }}</a>
         @endforeach
     </nav>
 
@@ -18,7 +18,7 @@
         @forelse ($rows as $row)
             <tr>
                 <td>{{ $row->rank ?? '?' }}</td>
-                <td><a href="/services/m=adventurers-log/a={{ urlencode($row->name) }}/main.ws">{{ $row->name }}</a></td>
+                <td><a href="/adventurer/{{ urlencode($row->name) }}">{{ $row->name }}</a></td>
                 <td>{{ $row->level ?? $row->total_level ?? '' }}</td>
                 <td>{{ number_format((int) ($row->xp ?? $row->total_xp ?? 0)) }}</td>
             </tr>

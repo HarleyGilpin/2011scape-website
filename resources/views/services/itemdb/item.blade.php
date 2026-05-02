@@ -9,5 +9,5 @@
         <li>Members: {{ ! empty($item->members) ? 'yes' : 'no' }}</li>
         <li>Tradeable: {{ ! empty($item->tradeable) ? 'yes' : 'no' }}</li>
     </ul>
-    <p><a href="/services/m=itemdb_rs/results">&laquo; Back to search</a></p>
+    <p><a href="/items">&laquo; Back to search</a></p>
 @endsection

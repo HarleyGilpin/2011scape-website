@@ -7,5 +7,5 @@
     <div class="notice">
         <p><strong>All membership benefits are free on this server.</strong> No payment is required.</p>
     </div>
-    <p><a href="/secure/m=weblogin/members/members.html">Back to members area</a></p>
+    <p><a href="/members">Back to members area</a></p>
 @endsection

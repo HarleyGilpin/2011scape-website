@@ -9,5 +9,5 @@
         <div class="body">{!! $post->body_html !!}</div>
         @if ($post->author)<p class="author">&mdash; {{ $post->author }}</p>@endif
     </article>
-    <p><a href="/services/m=devblog/index.html">&laquo; Back to dev blog</a></p>
+    <p><a href="/devblog">&laquo; Back to dev blog</a></p>
 @endsection

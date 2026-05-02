@@ -20,7 +20,7 @@
                 <p><em>Pending change to <strong>{{ $pending->new_name }}</strong> queued at {{ $pending->requested_at?->diffForHumans() }}.</em></p>
             @endif
 
-            <form method="post" action="/secure/m=displaynames/name.html">
+            <form method="post" action="/account/displayname">
                 @csrf
                 <label for="new_name">New display name</label><br>
                 <input type="text" id="new_name" name="new_name" maxlength="12" required>

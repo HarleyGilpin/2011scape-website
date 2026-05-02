@@ -5,5 +5,5 @@
 @section('content')
     <h1>RuneScape Classic</h1>
     <p>The Classic applet is no longer supported by modern browsers. Download the launcher instead:</p>
-    <p><a href="/game.html">Get the launcher</a></p>
+    <p><a href="/play">Get the launcher</a></p>
 @endsection

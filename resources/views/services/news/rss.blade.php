@@ -8,8 +8,8 @@
     @foreach ($items as $item)
     <item>
         <title>{!! e($item->title) !!}</title>
-        <link>{{ url('services/m='.'news/'.$item->slug.'.html') }}</link>
-        <guid isPermaLink="true">{{ url('services/m='.'news/'.$item->slug.'.html') }}</guid>
+        <link>{{ url('news/'.$item->slug) }}</link>
+        <guid isPermaLink="true">{{ url('news/'.$item->slug) }}</guid>
         @if ($item->published_at)<pubDate>{{ $item->published_at->toRfc822String() }}</pubDate>@endif
         <description>{!! e($item->summary ?? strip_tags($item->body_html)) !!}</description>
     </item>

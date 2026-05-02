@@ -6,14 +6,13 @@ use Illuminate\Contracts\View\View;
 
 class TicketingController extends Controller
 {
-    public function show(string $page): View
+    public function index(): View
     {
-        $view = match (true) {
-            str_starts_with($page, 'billingsupport-cat-') => 'secure.ticketing.billingsupport_cat',
-            $page === 'billingsupport' => 'secure.ticketing.billingsupport',
-            default => 'secure.ticketing.billingsupport',
-        };
+        return view('secure.ticketing.billingsupport');
+    }
 
-        return view($view, ['page' => $page]);
+    public function show(int $cat): View
+    {
+        return view('secure.ticketing.billingsupport_cat', ['cat' => $cat]);
     }
 }

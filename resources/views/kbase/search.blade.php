@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="sectionHeader"><h1 class="plaque">Knowledge Base Search</h1></div>
-    <form action="/kbase/search.html" method="get" class="kb-search-form">
+    <form action="/kb" method="get" class="kb-search-form">
         <input type="search" name="q" value="{{ $q }}" placeholder="Search articles">
         <button type="submit">Search</button>
     </form>
@@ -14,7 +14,7 @@
         <ul class="kb-results">
             @forelse ($results as $hit)
                 <li>
-                    <a href="/kbase/guid/{{ $hit->slug }}.html"><strong>{{ $hit->title }}</strong></a>
+                    <a href="/kb/{{ $hit->slug }}"><strong>{{ $hit->title }}</strong></a>
                     @if (! empty($hit->snippet))
                         <p class="snippet">{!! preg_replace('#&lt;(/?mark)&gt;#', '<$1>', e($hit->snippet)) !!}</p>
                     @elseif ($hit->search_text)

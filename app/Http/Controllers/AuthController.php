@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended($dest !== '' ? $this->safeDest($dest) : '/secure/m=weblogin/members/members.html');
+        return redirect()->intended($dest !== '' ? $this->safeDest($dest) : '/members');
     }
 
     public function members(): View

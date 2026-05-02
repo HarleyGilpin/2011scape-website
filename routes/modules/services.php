@@ -5,13 +5,13 @@ use App\Http\Controllers\HiscoresController;
 use App\Http\Controllers\ItemDbController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('services/m=adventurers-log/a={user}/main.ws', [AdventurersLogController::class, 'show'])
+Route::get('/adventurer/{user}', [AdventurersLogController::class, 'show'])
     ->where('user', '[A-Za-z0-9_+\-]+')
-    ->name('adventurers_log');
+    ->name('adventurer');
 
-Route::get('services/m=hiscore/ranking.ws', [HiscoresController::class, 'ranking'])->name('hiscore.ranking');
-Route::view('services/m=hiscore/index.html', 'services.hiscore.index')->name('hiscore.index');
+Route::get('/hiscores', [HiscoresController::class, 'ranking'])->name('hiscores');
 
-Route::get('services/m=itemdb_rs/{any}', [ItemDbController::class, 'route'])
-    ->where('any', '.*')
-    ->name('itemdb');
+Route::get('/items', [ItemDbController::class, 'search'])->name('items.search');
+Route::get('/items/{id}', [ItemDbController::class, 'view'])
+    ->where('id', '[0-9]+')
+    ->name('items.show');

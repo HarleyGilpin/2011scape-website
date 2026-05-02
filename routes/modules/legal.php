@@ -1,32 +1,34 @@
 <?php
 
-use App\Http\Controllers\LegacyPageController;
 use Illuminate\Support\Facades\Route;
 
-$rootPages = [
-    'wilderness.html',
-    'account_management.html',
-    'competition_details.html',
-    'golden_joystick.html',
-    'options.html',
-    'parents.html',
-    'cookies.html',
-    'email_registration.html',
-    'splash.html',
-    'splash-media-1.html',
-    'splash-media-2.html',
-    'title-nosplash-1.html',
-    'title_video_popup.html',
-    'slu-j-0.html',
-];
+Route::view('/terms', 'legal.terms.terms')->name('terms');
+Route::get('/terms/{slug}', function (string $slug) {
+    $view = 'legal.terms.'.str_replace('-', '_', $slug);
+    abort_unless(view()->exists($view), 404);
+    return view($view);
+})->where('slug', '[A-Za-z0-9_\-]+')->name('terms.show');
 
-foreach ($rootPages as $page) {
-    Route::get($page, fn () => app(LegacyPageController::class)->show($page));
-}
+Route::view('/privacy', 'legal.privacy.privacy')->name('privacy');
 
-Route::get('terms/{page}.html', fn (string $page) => app(LegacyPageController::class)->show('terms/'.$page.'.html'))
-    ->where('page', '[A-Za-z0-9_\-]+');
-Route::get('rules/{page}.html', fn (string $page) => app(LegacyPageController::class)->show('rules/'.$page.'.html'))
-    ->where('page', '[A-Za-z0-9_\-]+');
-Route::get('privacy/{page}.html', fn (string $page) => app(LegacyPageController::class)->show('privacy/'.$page.'.html'))
-    ->where('page', '[A-Za-z0-9_\-]+');
+Route::get('/rules', function () {
+    return view('legal.rules.index', [
+        'rules' => collect([
+            'rule_account_sharing', 'rule_advert_blocking', 'rule_advertising_websites',
+            'rule_bug_exploitation', 'rule_encouraging_rule_breaking', 'rule_forum_misuse',
+            'rule_inappropriate_language', 'rule_multiple_logging', 'rule_password_scamming',
+            'rule_personal_information', 'rule_real_world_trading', 'rule_staff_impersonation',
+            'rule_third_party_software',
+        ])->map(fn ($slug) => [
+            'slug' => str_replace('rule_', '', $slug),
+            'view' => 'legal.rules.'.$slug,
+            'title' => str_replace('_', ' ', ucwords(substr($slug, 5), '_')),
+        ]),
+    ]);
+})->name('rules');
+
+Route::get('/rules/{slug}', function (string $slug) {
+    $view = 'legal.rules.rule_'.str_replace('-', '_', $slug);
+    abort_unless(view()->exists($view), 404);
+    return view($view);
+})->where('slug', '[A-Za-z0-9_\-]+')->name('rules.show');

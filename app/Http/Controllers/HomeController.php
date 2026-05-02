@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use App\Models\HotTopic;
+use App\Models\NewsItem;
+use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
 {
-    public function __construct(private readonly LegacyPageController $legacy) {}
-
-    public function index(): Response
+    public function index(): View
     {
-        return $this->legacy->show('index.html');
+        return view('home', [
+            'news' => NewsItem::query()->orderByDesc('published_at')->limit(4)->get(),
+            'hottopics' => HotTopic::query()->orderBy('position')->get(),
+        ]);
     }
 }

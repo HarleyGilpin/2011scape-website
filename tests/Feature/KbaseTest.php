@@ -27,7 +27,7 @@ class KbaseTest extends TestCase
 
     public function test_search_for_wilderness_finds_results_with_highlighted_snippets(): void
     {
-        $response = $this->get('/kbase/search.html?q=wilderness');
+        $response = $this->get('/kb?q=wilderness');
 
         $response->assertOk();
         $response->assertSee('<mark>', escape: false);
@@ -38,16 +38,19 @@ class KbaseTest extends TestCase
 
     public function test_article_renders_with_kbase_chrome(): void
     {
-        $response = $this->get('/kbase/guid/10th_anniversary.html');
+        $response = $this->get('/kb/10th_anniversary');
 
         $response->assertOk();
         $response->assertSeeText('RuneScape 10th Anniversary');
         $response->assertSee('class="plaque"', escape: false);
         $response->assertSee('/css/kbase-32.css', escape: false);
+        // Confirms the §17 chrome fix: outer wrapper present.
+        $response->assertSee('class="bodyBackground"', escape: false);
+        $response->assertSee('class="bodyBackgroundHead"', escape: false);
     }
 
     public function test_unknown_article_404s(): void
     {
-        $this->get('/kbase/guid/this_does_not_exist.html')->assertNotFound();
+        $this->get('/kb/this_does_not_exist')->assertNotFound();
     }
 }

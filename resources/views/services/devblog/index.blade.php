@@ -8,7 +8,7 @@
 
     @forelse ($posts as $post)
         <article class="devblog-post">
-            <h3><a href="/services/m=devblog/{{ $post->slug }}.html">{{ $post->title }}</a></h3>
+            <h3><a href="/devblog/{{ $post->slug }}">{{ $post->title }}</a></h3>
             @if ($post->published_at)<p class="date">{{ $post->published_at->format('d-M-Y') }}</p>@endif
             @if ($post->hero_image)<img src="{{ $post->hero_image }}" alt="">@endif
         </article>
